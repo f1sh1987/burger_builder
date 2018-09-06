@@ -98,14 +98,13 @@ purchaseContinueHandler = () => {
 
     render() {
         //copy object
-        console.log('render');
-        const disabledInfo = {
+              const disabledInfo = {
             ...this.state.ingredients
         };
         for(let key in disabledInfo){
             disabledInfo[key]= disabledInfo[key] <=0
         }
-        console.log(disabledInfo);
+       
         // {salad:true, meat:false,...}
         return(
             <Aux>
