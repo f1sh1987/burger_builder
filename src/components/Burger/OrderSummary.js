@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import Aux from '../../hoc/Aux';
+import Aux from '../../hoc/Auxs';
 import Button from '../UI/Button/Button';
 class OrderSummary extends Component {
     //We check this because the Order Summary is wrapped in the modal ==> only import to update if modal is visible
