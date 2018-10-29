@@ -8,35 +8,20 @@ import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler';
 import {connect} from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 
 class BurgerBuilder extends Component {
     constructor(props){
         super(props);
         this.state = {
-            purchasing: false,
-            loading:false,
-            error:false
+            purchasing: false
+
         }
     }
 
     componentDidMount(){
-        //get Routing Information about history & match but just for component that were directly routed therefore we need withRouter(Burger.js)
-     /*   console.log(this.props);
-        axios.get('https://react-my-burger-ca53c.firebaseio.com/ingredients.json')
-        .then(response => {
-            this.setState({
-                ingredients: {
-                salad:response.data.salad,
-                bacon:response.data.bacon,
-                cheese:response.data.cheese,
-                meat:response.data.meat
-                }
-            });
-        })
-        .catch(error => {this.setState({error:error})});
-        */
+       this.props.onInitIngredients();
     }
 
     updatePurchaseState(ingredients){
@@ -82,7 +67,7 @@ this.props.history.push('/checkout');
             let orderSummary = null;
             
 
-            let burger = this.state.error? <p>Ingredients can't be loaded</p>:<Spinner/>;
+            let burger = this.props.error? <p>Ingredients can't be loaded</p>:<Spinner/>;
 
             //check if ingredients are loaded
             if(this.props.ings) {
@@ -106,9 +91,7 @@ this.props.history.push('/checkout');
             />
            
         }
-        if(this.state.loading){
-            orderSummary = <Spinner/>
-        }
+      
       
        
         // {salad:true, meat:false,...}
@@ -127,14 +110,16 @@ this.props.history.push('/checkout');
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        error: state.error
     }
 }
 const mapDispatchtoProps = dispatch => {
     return {
-        onIngredientAdded: (ingredientName) => dispatch({type:actionTypes.ADD_INGREDIENT, ingredientName:ingredientName}),
-        onIngredientRemoved: (ingredientName) => dispatch({type:actionTypes.REMOVE_INGREDIENT, ingredientName:ingredientName})
+        onIngredientAdded: (ingredientName) => dispatch(burgerBuilderActions.addIngredient(ingredientName)),
+        onIngredientRemoved: (ingredientName) => dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
+        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients())
     }
 }
 
-export default connect(mapStateToProps,mapDispatchtoProps)(withErrorHandler(BurgerBuilder, axios));
+export default connect(mapStateToProps,mapDispatchtoProps)(withErrorHandler(BurgerBuilder,axios));
