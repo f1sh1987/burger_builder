@@ -8,6 +8,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         }
  //before child components are rendered
         componentWillMount () {
+            //get the request to clear the error message
             this.requestInterceptor = axios.interceptors.request.use(req => req, error => {
                 this.setState({error:null});
             });
